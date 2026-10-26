@@ -1,0 +1,40 @@
+{
+    "name": "myicon",
+    "version": "1.0.0",
+    "description": "MyIcon: the full icon pack for mypgs, as inline SVG masks.",
+    "style": "./dist/icons.css",
+    "sass": "./scss/index.scss",
+    "exports": {
+        "./style.css": "./dist/icons.css",
+        "./style.min.css": "./dist/icons.min.css",
+        "./scss": "./scss/index.scss",
+        "./scss/glyphs": "./scss/_glyphs.scss",
+        "./svg/*": "./svg/*"
+    },
+    "files": [
+        "scss/",
+        "svg/",
+        "dist/",
+        "scripts/",
+        "README.md"
+    ],
+    "scripts": {
+        "sync": "node scripts/sync-icons.js",
+        "build": "npm run sync && sass scss/index.scss dist/icons.css --no-source-map && sass scss/index.scss dist/icons.min.css --no-source-map --style=compressed",
+        "watch": "sass scss/index.scss dist/icons.css --no-source-map --watch",
+        "- GIT -": "",
+        "syncmaster": "git fetch origin && git checkout master && git pull --ff-only origin master && git merge --no-edit origin/dev && git push origin master && git checkout dev",
+        "syncmaster:commit": "printf 'Merge message: ' && IFS= read -r merge_message && test -n \"$merge_message\" && git fetch origin && git checkout master && git pull --ff-only origin master && git merge --no-ff origin/dev -m \"$merge_message\" && git push origin master && git checkout dev"
+    },
+    "keywords": [
+        "icons",
+        "svg",
+        "css",
+        "scss",
+        "mypgs"
+    ],
+    "license": "ISC",
+    "devDependencies": {
+        "sass": "~1.86.3"
+    }
+}

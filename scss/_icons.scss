@@ -1,0 +1,99 @@
+@use "sass:list";
+
+//= ICON RULES
+// The rules that make glyphs writable in the icon bracket of mypgs, as a mixin that takes the glyphs to
+// emit: $set is the single-layer glyphs (the shape of $icons-builtin in _glyphs.scss) and $duo the
+// two-layer ones ($icons-duo). index.scss emits the whole pack; a project that needs only a few
+// glyphs includes it with a map of its own:
+//
+//     @use "myicon/scss/glyphs" as pack;
+//     @use "myicon/scss/icons" as icons;
+//     @include icons.icons((cookie: pack.$icon-cookie), ());
+//
+// The rules are the same as the ones mypgs' own assets/scss/components/_icon.scss writes, so a glyph
+// that lives in both draws identically whichever stylesheet is loaded last.
+
+//## Svg mask
+// the shape is painted through a mask, so it follows currentColor instead of carrying its own
+@mixin svgMask($url) {
+    -webkit-mask: $url center/contain no-repeat;
+    mask: $url center/contain no-repeat;
+}
+
+@mixin icons($set, $duo: ()) {
+    //# GLYPHS
+    // the drawings, kept away from the icon's own configuration (--icon, --icon-size, --icon-color)
+    :root {
+        @each $name, $url in $set {
+            --icon-glyph-#{$name}: #{$url};
+        }
+
+        @each $name, $layers in $duo {
+            --icon-glyph-#{$name}-before: #{list.nth($layers, 1)};
+            --icon-glyph-#{$name}-after: #{list.nth($layers, 2)};
+        }
+    }
+
+    //# ICON
+    // the box the glyph is drawn in, at no specificity: where mypgs is loaded its own rule wins, and on its
+    // own this is enough to draw one at the font size, in the text color
+    :where(:is([pgs~="icon"], [pgs*="icon\5B"]))::before {
+        line-height: 1;
+        font-size: var(--icon-size);
+        display: inline-block;
+        width: var(--icon-size, 1em);
+        height: var(--icon-size, 1em);
+        background-color: var(--icon-color, currentColor);
+        vertical-align: -0.125em;
+        content: "";
+    }
+
+    :is([pgs~="icon"], [pgs*="icon\5B"]) {
+
+        //## ONE OPTION PER GLYPH
+        // icon['icon-name']: the drawing goes on --icon, and the mask on ::before, where the box above was drawn
+        @each $name, $url in $set {
+            &:where([pgs*="'icon-#{$name}'"]) {
+                --icon: var(--icon-glyph-#{$name});
+
+                &::before { @include svgMask(var(--icon)); }
+            }
+        }
+
+        //## DUO ICON
+        // two-layer glyphs use a mask per pseudo-element, both in the same grid cell, written after the flat
+        // ones so that iconDuo wins over them
+        @each $name, $layers in $duo {
+            &:where([pgs*="'icon-#{$name}'"][pgs*="'iconDuo'"]) {
+                --icon-before: var(--icon-glyph-#{$name}-before);
+                --icon-after: var(--icon-glyph-#{$name}-after);
+                --icon-before-color: var(--icon-color, currentColor);
+                --icon-after-color: var(--icon-color, currentColor);
+                display: inline-grid;
+                place-items: center;
+                inline-size: var(--icon-size, 1em);
+                block-size: var(--icon-size, 1em);
+
+                &::before,
+                &::after {
+                    content: "";
+                    display: inline-block;
+                    width: var(--icon-size, 1em);
+                    height: var(--icon-size, 1em);
+                    vertical-align: -0.125em;
+                    grid-area: 1 / 1;
+                }
+
+                &::before {
+                    @include svgMask(var(--icon-before));
+                    background-color: var(--icon-before-color);
+                }
+
+                &::after {
+                    @include svgMask(var(--icon-after));
+                    background-color: var(--icon-after-color);
+                }
+            }
+        }
+    }
+}
