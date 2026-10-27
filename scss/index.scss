@@ -1,7 +1,7 @@
 @use "glyphs" as *;
 @use "icons";
 
-//= MYICON
+//= MYICONS
 // The icon pack for mypgs: every glyph of scss/_glyphs.scss as a custom property, and the rules that
 // make each one writable in the icon bracket of mypgs. The glyphs themselves are generated from svg/
 // by `npm run sync`, the rules are the mixin of scss/_icons.scss; this file only puts them together.

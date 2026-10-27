@@ -1,14 +1,22 @@
 {
-    "name": "myicon",
+    "name": "@marcix/myicons",
     "version": "1.0.0",
-    "description": "MyIcon: the full icon pack for mypgs, as inline SVG masks.",
+    "description": "MyIcons: the full icon pack for mypgs, as inline SVG masks.",
     "style": "./dist/icons.css",
     "sass": "./scss/index.scss",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Marcix25/myIcons.git"
+    },
     "exports": {
         "./style.css": "./dist/icons.css",
         "./style.min.css": "./dist/icons.min.css",
         "./scss": "./scss/index.scss",
         "./scss/glyphs": "./scss/_glyphs.scss",
+        "./scss/icons": "./scss/_icons.scss",
         "./svg/*": "./svg/*"
     },
     "files": [

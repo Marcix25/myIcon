@@ -6,8 +6,8 @@
 // two-layer ones ($icons-duo). index.scss emits the whole pack; a project that needs only a few
 // glyphs includes it with a map of its own:
 //
-//     @use "myicon/scss/glyphs" as pack;
-//     @use "myicon/scss/icons" as icons;
+//     @use "@marcix/myicons/scss/glyphs" as pack;
+//     @use "@marcix/myicons/scss/icons" as icons;
 //     @include icons.icons((cookie: pack.$icon-cookie), ());
 //
 // The rules are the same as the ones mypgs' own assets/scss/components/_icon.scss writes, so a glyph
